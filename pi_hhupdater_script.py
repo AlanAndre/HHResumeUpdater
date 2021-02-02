@@ -20,49 +20,47 @@ def browser_options():
 
 def main():
     print(f'Приступаю к работе: {datetime.now()}')
-    driver = webdriver.Chrome(options=browser_options(), executable_path='/usr/lib/chromium-browser/chromedriver')
-    # Start
-    driver.get('https://hh.ru/')
-    print(f'Открыл браузер: {datetime.now()}')
-    # Enter
-    driver.find_element_by_link_text('Войти').click()
-    print(f'Нажал кнопку "Войти": {datetime.now()}')
-    sleep(uniform(1.0, 3.5))  # some random for good measure
-    # Login
-    login = driver.find_elements_by_class_name('bloko-input')
-    login[1].send_keys(config.user_name)
-    print(f'Ввел номер телефона или почту: {datetime.now()}')
-    sleep(uniform(1.0, 3.5))
-    # Password
-    login[2].send_keys(config.password)
-    print(f'Ввел пароль: {datetime.now()}')
-    sleep(uniform(1.0, 3.5))
-    # Enter
-    enter = driver.find_elements_by_class_name('bloko-form-row')
-    enter[1].click()
-    print(f'Залогинился на сайт: {datetime.now()}')
-    sleep(3)
-    # Enter resume
-    try:
-        driver.find_element_by_css_selector(".HH-Supernova-NaviLevel2-Link").click()
-        print(f'Зашел во вкладку "Мои резюме": {datetime.now()}')
-        sleep(2)
-    except ElementClickInterceptedException:
-        print(f"Something ain't right: {datetime.now()}\nShutting down")
-        driver.quit()
-        exit()
-    # driver.find_element_by_link_text("Мои резюме").click()
-    # Поднимает в поиске резюме. Цикл для того, чтобы поднимать несколько резюме.
-    for i in driver.find_elements_by_css_selector(".applicant-resumes-update-button"):
+    with webdriver.Chrome(options=browser_options(), executable_path='/usr/lib/chromium-browser/chromedriver') as driver:
+        # Start
+        driver.get('https://hh.ru/')
+        print(f'Открыл браузер: {datetime.now()}')
+        # Enter
+        driver.find_element_by_link_text('Войти').click()
+        print(f'Нажал кнопку "Войти": {datetime.now()}')
+        sleep(uniform(1.0, 3.5))  # some random for good measure
+        # Login
+        login = driver.find_elements_by_class_name('bloko-input')
+        login[1].send_keys(config.user_name)
+        print(f'Ввел номер телефона или почту: {datetime.now()}')
+        sleep(uniform(1.0, 3.5))
+        # Password
+        login[2].send_keys(config.password)
+        print(f'Ввел пароль: {datetime.now()}')
+        sleep(uniform(1.0, 3.5))
+        # Enter
+        enter = driver.find_elements_by_class_name('bloko-form-row')
+        enter[1].click()
+        print(f'Залогинился на сайт: {datetime.now()}')
+        sleep(3)
+        # Enter resume
         try:
-            i.click()
-            print(f'Поднял резюме в поиске: {datetime.now()}')
+            driver.find_element_by_css_selector(".HH-Supernova-NaviLevel2-Link").click()
+            print(f'Зашел во вкладку "Мои резюме": {datetime.now()}')
             sleep(2)
         except ElementClickInterceptedException:
-            print(f'Еще рано! кнопка недоступна!: {datetime.now()}')
-    # Close
-    driver.close()
-    print(f'Выключил браузер: {datetime.now()}')
+            print(f"Something ain't right: {datetime.now()}\nShutting down")
+            exit()
+        # driver.find_element_by_link_text("Мои резюме").click()
+        # Поднимает в поиске резюме. Цикл для того, чтобы поднимать несколько резюме.
+        for i in driver.find_elements_by_css_selector(".applicant-resumes-update-button"):
+            try:
+                i.click()
+                print(f'Поднял резюме в поиске: {datetime.now()}')
+                sleep(2)
+            except ElementClickInterceptedException:
+                print(f'Еще рано! кнопка недоступна!: {datetime.now()}')
+        # Close
+        print(f'Выключил браузер: {datetime.now()}')
 
 
 if __name__ == '__main__':
