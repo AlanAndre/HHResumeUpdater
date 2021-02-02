@@ -17,7 +17,7 @@ def browser_options():
     # don't need images
     options.add_experimental_option("prefs", {"profile.managed_default_content_settings.images": 2})
     options.add_argument("--disable-blink-features=AutomationControlled")
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
     return options
 
 
@@ -25,48 +25,47 @@ def browser_options():
 def main(timer):
     while timer > 0:
         logger.info('Приступаю к работе')
-        driver = webdriver.Chrome(options=browser_options(), executable_path=ChromeDriverManager().install())
-        # Start
-        driver.get('https://hh.ru/')
-        logger.info('Открыл браузер')
-        # Enter
-        driver.find_element_by_link_text('Войти').click()
-        logger.info('Нажал кнопку "Войти"')
-        sleep(uniform(1.0, 3.5))  # some random for good measure
-        # Login
-        login = driver.find_elements_by_class_name('bloko-input')
-        login[1].send_keys(config.user_name)
-        logger.info('Ввел номер телефона или почту')
-        sleep(uniform(1.0, 3.5))
-        # Password
-        login[2].send_keys(config.password)
-        logger.info('Ввел пароль')
-        sleep(uniform(1.0, 3.5))
-        # Enter
-        enter = driver.find_elements_by_class_name('bloko-form-row')
-        enter[1].click()
-        logger.info('Залогинился на сайт')
-        sleep(3)
-        # Enter resume
-        driver.find_element_by_css_selector(".HH-Supernova-NaviLevel2-Link").click()
-        # driver.find_element_by_link_text("Мои резюме").click()
-        logger.info('Зашел во вкладку "Мои резюме"')
-        sleep(2)
-        # Поднимает в поиске резюме. Цикл для того, чтобы поднимать несколько резюме.
-        for i in driver.find_elements_by_css_selector(".applicant-resumes-update-button"):
-            try:
-                i.click()
-                logger.info('Поднял резюме в поиске')
-                sleep(2)
-            except ElementClickInterceptedException:
-                logger.info('Еще рано! кнопка недоступна!')
-        # Close
-        driver.close()
-        logger.info('Выключил браузер')
+        with webdriver.Chrome(options=browser_options(), executable_path=ChromeDriverManager().install()) as driver:
+            # Start
+            driver.get('https://hh.ru/')
+            logger.info('Открыл браузер')
+            # Enter
+            driver.find_element_by_link_text('Войти').click()
+            logger.info('Нажал кнопку "Войти"')
+            sleep(uniform(1.0, 3.5))  # some random for good measure
+            # Login
+            login = driver.find_elements_by_class_name('bloko-input')
+            login[1].send_keys(config.user_name)
+            logger.info('Ввел номер телефона или почту')
+            sleep(uniform(1.0, 3.5))
+            # Password
+            login[2].send_keys(config.password)
+            logger.info('Ввел пароль')
+            sleep(uniform(1.0, 3.5))
+            # Enter
+            enter = driver.find_elements_by_class_name('bloko-form-row')
+            enter[1].click()
+            logger.info('Залогинился на сайт')
+            sleep(3)
+            # Enter resume
+            driver.find_element_by_css_selector(".HH-Supernova-NaviLevel2-Link").click()
+            # driver.find_element_by_link_text("Мои резюме").click()
+            logger.info('Зашел во вкладку "Мои резюме"')
+            sleep(2)
+            # Поднимает в поиске резюме. Цикл для того, чтобы поднимать несколько резюме.
+            for i in driver.find_elements_by_css_selector(".applicant-resumes-update-button"):
+                try:
+                    i.click()
+                    logger.info('Поднял резюме в поиске')
+                    sleep(2)
+                except ElementClickInterceptedException:
+                    logger.info('Еще рано! кнопка недоступна!')
+            # Close
+            logger.info('Выключил браузер')
         # Counter
         timer -= 1
         logger.info(f'Перематываю счетчик, осталось отработать {timer} раз')
-        # Waiting 4 hours and some random for good measure
+        # Waiting 4 hours and some random value for good measure
         logger.info('Ложусь спать на +-4 часа\n')
         sleep((randint(0, 30) + 60) * 60 * 4)
         logger.info('Проснулся')
