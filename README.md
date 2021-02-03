@@ -29,7 +29,7 @@ Loguru is more memory intensive than 'print', so I've found.
 > > - `crontab -e`
 > 
 > > - `0 3,11,19 * * * /usr/bin/python3 <DIR>/hh_updater.py >> <DIR>/logs/updater.log 2>&1`
-> > - `10 7,15,23 * * * /usr/bin/python3 /home/pi/hh_resume_updater_Selenium/hh_updater.py >> /home/pi/hh_resume_updater_Selenium/logs/updater.log 2>&1`
+> > - `10 7,15,23 * * * /usr/bin/python3 <DIR>/hh_updater.py >> <DIR>/logs/updater.log 2>&1`
 > > - `0 0 * * 1 find <DIR>/logs -mtime +10 -type f -delete`
 > 
 > On my RasberryPi Zero, which is also running PiHole, the script takes +- 5 minutes.
