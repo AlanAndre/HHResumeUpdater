@@ -17,7 +17,7 @@ Loguru is more memory intensive than 'print', so I've found.
 > 
 > - `sudo apt-get install chromium-chromedriver`
 > 
-> - A nice idea is to increase swap space:
+> A nice idea is to increase swap space:
 > > - `sudo nano /etc/dphys-swapfile`
 > > - Raspbian has 100MB of swap by default. You should change it to 2048MB in the configuration file. 
       So you will have to find this line:`CONF_SWAPSIZE=100` And then change it into:
@@ -25,7 +25,7 @@ Loguru is more memory intensive than 'print', so I've found.
 > > - `sudo /etc/init.d/dphys-swapfile stop`
 > > - `sudo /etc/init.d/dphys-swapfile start`
 
-> - This is my way of automating the process using Crontab which outputs standard output and standard error to "updater.log" and deleting the file when it's older then 7 days:
+> This is my way of automating the process using Crontab which outputs standard output and standard error to "updater.log" and deleting the file when it's older then 7 days:
 > > - `crontab -e`
 > > - `5 7 * * * /usr/bin/python3 <DIR>/hh_updater.py >> <DIR>/logs/updater.log 2>&1`
 > > - `10 11 * * * /usr/bin/python3 <DIR>/hh_updater.py >> <DIR>/logs/updater.log 2>&1`
