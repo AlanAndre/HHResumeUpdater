@@ -7,7 +7,7 @@
 >
 > - Install selenium. pip install selenium==3.141.0
 > 
-> - create a 'config.py' file with "user_name, password = '$USERNAME', '$PASSWORD'"
+> - Create a 'config.py' file with "user_name, password = '$USERNAME', '$PASSWORD'"
 >
 > - Start script. You can choose how many times the script will run
 
@@ -17,7 +17,7 @@ Loguru is more memory intensive than 'print', so I've found.
 > 
 > - `sudo apt-get install chromium-chromedriver`
 > 
-> - A nice idea to increase swap space:
+> - A nice idea is to increase swap space:
 > > - `sudo nano /etc/dphys-swapfile`
 > > - Raspbian has 100MB of swap by default. You should change it to 2048MB in the configuration file. 
       So you will have to find this line:`CONF_SWAPSIZE=100` And then change it into:
@@ -25,13 +25,15 @@ Loguru is more memory intensive than 'print', so I've found.
 > > - `sudo /etc/init.d/dphys-swapfile stop`
 > > - `sudo /etc/init.d/dphys-swapfile start`
 
-> - This is my way of automating the process using Crontab which outputs standard output and standard error to "updater.log" and deleting the file when it's older then 10 days:
+> - This is my way of automating the process using Crontab which outputs standard output and standard error to "updater.log" and deleting the file when it's older then 7 days:
 > > - `crontab -e`
-> 
-> > - `0 3,11,19 * * * /usr/bin/python3 <DIR>/hh_updater.py >> <DIR>/logs/updater.log 2>&1`
-> > - `10 7,15,23 * * * /usr/bin/python3 <DIR>/hh_updater.py >> <DIR>/logs/updater.log 2>&1`
-> > - `0 0 * * 1 find <DIR>/logs -mtime +10 -type f -delete`
-> 
+> > - `5 7 * * * /usr/bin/python3 <DIR>/hh_updater.py >> <DIR>/logs/updater.log 2>&1`
+> > - `10 11 * * * /usr/bin/python3 <DIR>/hh_updater.py >> <DIR>/logs/updater.log 2>&1`
+> > - `15 15 * * * /usr/bin/python3 <DIR>/hh_updater.py >> <DIR>/logs/updater.log 2>&1`
+> > - `20 19 * * * /usr/bin/python3 <DIR>/hh_updater.py >> <DIR>/logs/updater.log 2>&1`
+> > - `25 23 * * * /usr/bin/python3 <DIR>/hh_updater.py >> <DIR>/logs/updater.log 2>&1`
+> > - `0 0 * * 1 find /home/pi/hh_resume_updater_Selenium/logs -mtime +7 -type f -delete`
+
 > On my RasberryPi Zero, which is also running PiHole, the script takes +- 5 minutes.
 
 #### Features of this script:
