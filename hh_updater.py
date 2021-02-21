@@ -1,9 +1,12 @@
-from selenium import webdriver
-from selenium.common.exceptions import ElementClickInterceptedException
+from random import uniform
 from time import sleep
-from webdriver_manager.chrome import ChromeDriverManager
-from random import randint, uniform
+
 from loguru import logger
+from selenium import webdriver
+from selenium.common.exceptions import (ElementClickInterceptedException,
+                                        NoSuchElementException)
+from webdriver_manager.chrome import ChromeDriverManager
+
 import config
 
 logger.add('updater.log', format='{time} {level} {message}',
@@ -33,6 +36,11 @@ def main(timer):
             driver.find_element_by_link_text('Войти').click()
             logger.info('Нажал кнопку "Войти"')
             sleep(uniform(1.0, 3.5))  # some random for good measure
+            try:
+                # Tries if there is a password field
+                driver.find_elements_by_class_name('bloko-input')[2]
+            except IndexError:
+                driver.find_element_by_css_selector('span.bloko-link-switch').click()
             # Login
             login = driver.find_elements_by_class_name('bloko-input')
             login[1].send_keys(config.user_name)
@@ -43,8 +51,11 @@ def main(timer):
             logger.info('Ввел пароль')
             sleep(uniform(1.0, 3.5))
             # Enter
-            enter = driver.find_elements_by_class_name('bloko-form-row')
-            enter[1].click()
+            try:
+                # New button
+                driver.find_element_by_css_selector('.account-login-actions > button:nth-child(1)').click()
+            except NoSuchElementException:
+                driver.find_elements_by_class_name('bloko-form-row')[1].click()
             logger.info('Залогинился на сайт')
             sleep(3)
             # Enter resume
@@ -66,8 +77,8 @@ def main(timer):
         timer -= 1
         logger.info(f'Перематываю счетчик, осталось отработать {timer} раз')
         # Waiting 4 hours and some random value for good measure
-        logger.info('Ложусь спать на +-4 часа\n')
-        sleep((randint(0, 30) + 60) * 60 * 4)
+        logger.info('Ложусь спать на 4 часа\n')
+        sleep(60 * 60 * 4)
         logger.info('Проснулся')
 
 

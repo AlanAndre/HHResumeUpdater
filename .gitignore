@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 updater.log
 config.py
+.idea

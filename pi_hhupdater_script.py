@@ -1,10 +1,13 @@
-from selenium import webdriver
-from selenium.common.exceptions import ElementClickInterceptedException
 from datetime import datetime
-from time import sleep
 from random import uniform
-import config
 from sys import exit
+from time import sleep
+
+from selenium import webdriver
+from selenium.common.exceptions import (ElementClickInterceptedException,
+                                        NoSuchElementException)
+
+import config
 
 
 def browser_options():
@@ -28,6 +31,11 @@ def main():
         driver.find_element_by_link_text('Войти').click()
         print(f'Нажал кнопку "Войти": {datetime.now()}')
         sleep(uniform(1.0, 3.5))  # some random for good measure
+        try:
+            # Tries if there is a password field
+            driver.find_elements_by_class_name('bloko-input')[2]
+        except IndexError:
+            driver.find_element_by_css_selector('span.bloko-link-switch').click()
         # Login
         login = driver.find_elements_by_class_name('bloko-input')
         login[1].send_keys(config.user_name)
@@ -38,6 +46,11 @@ def main():
         print(f'Ввел пароль: {datetime.now()}')
         sleep(uniform(1.0, 3.5))
         # Enter
+        try:
+            # New button
+            driver.find_element_by_css_selector('.account-login-actions > button:nth-child(1)').click()
+        except NoSuchElementException:
+            driver.find_elements_by_class_name('bloko-form-row')[1].click()
         enter = driver.find_elements_by_class_name('bloko-form-row')
         enter[1].click()
         print(f'Залогинился на сайт: {datetime.now()}')
