@@ -1,5 +1,9 @@
 __pycache__/
 *.pyc
 updater.log
-config.py
+utils/config.py
 .idea
+cookies.pkl
+geckodriver.log
+.mypy_cache
+temp/
